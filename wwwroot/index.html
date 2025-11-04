@@ -8,7 +8,7 @@
         body {
             font-family: Arial, sans-serif;
             margin: 2rem auto;
-            max-width: 800px;
+            max-width: 850px;
             line-height: 1.6;
             color: #222;
         }
@@ -24,10 +24,11 @@
         }
 
         .endpoint {
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             border: 1px solid #ddd;
-            padding: 1rem;
+            padding: 1.5rem;
             border-radius: 6px;
+            background: #fafafa;
         }
 
         input, button {
@@ -69,6 +70,12 @@
                 font-weight: bold;
                 text-decoration: underline;
             }
+
+        .section-title {
+            font-weight: bold;
+            color: #444;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -77,24 +84,43 @@
         <a href="https://smsauthui.onrender.com/" target="_blank">https://smsauthui.onrender.com/</a>
     </div>
 
-    <h1>📘 SMS Auth API Documentation for CarWash App</h1>
+    <h1>📘 SMS Auth API Documentation</h1>
     <p>
-        This API provides SMS-based verification functionality using Twilio.
-        You can use the endpoints below to send and verify OTP codes.
+        This API provides endpoints to send and verify SMS-based verification codes using <strong>Twilio</strong>.
+        You can test them here or in <strong>Postman</strong> using the details below.
     </p>
 
     <hr>
 
     <div class="endpoint">
         <h2>POST /api/verification/send</h2>
-        <p>Send a verification code to a phone number.</p>
+        <p>Sends a verification code to a specified phone number.</p>
 
-        <h3>Request Body (JSON)</h3>
-        <pre>{
-  "phoneNumber": "+1234567890"
-}</pre>
+        <div class="section-title">🔹 Headers (for Postman)</div>
+        <pre>
+Content-Type: application/json
+    </pre>
 
-        <h3>Try it:</h3>
+        <div class="section-title">🔹 Request Body (JSON)</div>
+        <pre>
+"+1234567890"
+    </pre>
+
+        <div class="section-title">🔹 Example Curl Command</div>
+        <pre>
+curl -X POST https://smsauthapi.onrender.com/api/verification/send \
+  -H "Content-Type: application/json" \
+  -d "\"+1234567890\""
+    </pre>
+
+        <div class="section-title">🔹 Example Response</div>
+        <pre>
+{
+  "status": "pending"
+}
+    </pre>
+
+        <h3>Try it directly below:</h3>
         <input id="phoneNumber" type="text" placeholder="Enter phone number (+1234567890)" style="width: 100%;">
         <button onclick="sendVerification()">Send Verification</button>
         <pre id="sendResult"></pre>
@@ -102,15 +128,36 @@
 
     <div class="endpoint">
         <h2>POST /api/verification/check</h2>
-        <p>Verify a code that was sent to a phone number.</p>
+        <p>Checks whether a verification code is valid for a given phone number.</p>
 
-        <h3>Request Body (JSON)</h3>
-        <pre>{
+        <div class="section-title">🔹 Headers (for Postman)</div>
+        <pre>
+Content-Type: application/json
+    </pre>
+
+        <div class="section-title">🔹 Request Body (JSON)</div>
+        <pre>
+{
   "phoneNumber": "+1234567890",
   "code": "123456"
-}</pre>
+}
+    </pre>
 
-        <h3>Try it:</h3>
+        <div class="section-title">🔹 Example Curl Command</div>
+        <pre>
+curl -X POST https://smsauthapi.onrender.com/api/verification/check \
+  -H "Content-Type: application/json" \
+  -d "{ \"phoneNumber\": \"+1234567890\", \"code\": \"123456\" }"
+    </pre>
+
+        <div class="section-title">🔹 Example Response</div>
+        <pre>
+{
+  "status": "approved"
+}
+    </pre>
+
+        <h3>Try it directly below:</h3>
         <input id="verifyPhone" type="text" placeholder="Enter phone number (+1234567890)" style="width: 100%;">
         <input id="verifyCode" type="text" placeholder="Enter verification code" style="width: 100%;">
         <button onclick="checkVerification()">Check Verification</button>
