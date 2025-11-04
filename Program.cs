@@ -11,6 +11,9 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+app.UseDefaultFiles();  // looks for index.html
+app.UseStaticFiles();   // serves from wwwroot
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

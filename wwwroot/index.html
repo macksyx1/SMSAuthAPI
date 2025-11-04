@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SMS Auth API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem auto;
+            max-width: 800px;
+            line-height: 1.6;
+            color: #222;
+        }
+
+        h1, h2 {
+            color: #0366d6;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .endpoint {
+            margin-bottom: 2rem;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            border-radius: 6px;
+        }
+
+        input, button {
+            padding: 0.5rem;
+            font-size: 1rem;
+            margin: 0.25rem 0;
+        }
+
+        button {
+            background: #0366d6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background: #024f9b;
+            }
+
+        pre {
+            background: #f9f9f9;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        .demo-banner {
+            background: #0366d6;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+        }
+
+            .demo-banner a {
+                color: white;
+                font-weight: bold;
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+    <div class="demo-banner">
+        🚀 Check out the demo web app that consumes this API:
+        <a href="https://smsauthui.onrender.com/" target="_blank">https://smsauthui.onrender.com/</a>
+    </div>
+
+    <h1>📘 SMS Auth API Documentation for CarWash App</h1>
+    <p>
+        This API provides SMS-based verification functionality using Twilio.
+        You can use the endpoints below to send and verify OTP codes.
+    </p>
+
+    <hr>
+
+    <div class="endpoint">
+        <h2>POST /api/verification/send</h2>
+        <p>Send a verification code to a phone number.</p>
+
+        <h3>Request Body (JSON)</h3>
+        <pre>{
+  "": "+1234567890"
+}</pre>
+
+        <h3>Try it:</h3>
+        <input id="phoneNumber" type="text" placeholder="Enter phone number (+1234567890)" style="width: 100%;">
+        <button onclick="sendVerification()">Send Verification</button>
+        <pre id="sendResult"></pre>
+    </div>
+
+    <div class="endpoint">
+        <h2>POST /api/verification/check</h2>
+        <p>Verify a code that was sent to a phone number.</p>
+
+        <h3>Request Body (JSON)</h3>
+        <pre>{
+  "phoneNumber": "+1234567890",
+  "code": "123456"
+}</pre>
+
+        <h3>Try it:</h3>
+        <input id="verifyPhone" type="text" placeholder="Enter phone number (+1234567890)" style="width: 100%;">
+        <input id="verifyCode" type="text" placeholder="Enter verification code" style="width: 100%;">
+        <button onclick="checkVerification()">Check Verification</button>
+        <pre id="checkResult"></pre>
+    </div>
+
+    <script>
+        const baseUrl = window.location.origin;
+
+        async function sendVerification() {
+            const phone = document.getElementById("phoneNumber").value;
+            const resultBox = document.getElementById("sendResult");
+            resultBox.textContent = "Sending...";
+
+            try {
+                const response = await fetch(`${baseUrl}/api/verification/send`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(phone)
+                });
+                const data = await response.json();
+                resultBox.textContent = JSON.stringify(data, null, 2);
+            } catch (err) {
+                resultBox.textContent = "Error: " + err.message;
+            }
+        }
+
+        async function checkVerification() {
+            const phone = document.getElementById("verifyPhone").value;
+            const code = document.getElementById("verifyCode").value;
+            const resultBox = document.getElementById("checkResult");
+            resultBox.textContent = "Verifying...";
+
+            try {
+                const response = await fetch(`${baseUrl}/api/verification/check`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ phoneNumber: phone, code })
+                });
+                const data = await response.json();
+                resultBox.textContent = JSON.stringify(data, null, 2);
+            } catch (err) {
+                resultBox.textContent = "Error: " + err.message;
+            }
+        }
+    </script>
+</body>
+</html>
